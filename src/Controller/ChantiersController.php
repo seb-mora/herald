@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
- * Affiche le formulaire de modification d'un produit existant.
+ * Affiche le formulaire de modification d'un produit existant.d
  * GET /product/update/{idProduct}
  * @param array $assocParams Tableau associatif des paramètres.
  * @return void
