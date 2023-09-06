@@ -1,0 +1,75 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+
+{% block title %}Herald - Administration{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex-column justify-center bg-white/70 h-[82%] pb-8">
+    <div class="justify-center pb-4 text-center">     
+        <h1 class="text-4xl lg:text-5xl font-bold pt-4 pb-4" >
+           Informations personnel
+        </h1>
+
+        <a class="nav-link" href="{{ path('admin_info_user_new') }}">
+            <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">Créer nouvelle information personnel</button>
+        </a>
+
+    </div>
+
+    <p class="pl-16 font-bold text-3xl"> Informations affichées </p>
+    <div class="overflow-x-hidden max-h-[30%] ml-[20px]">
+        {% for info in infoUsersShow %}
+            <a href='{{ path('admin_info_user_show', {'id': info.id}) }}'>
+                <div class=" bg-zinc-50 flex flex-row justify-between text-center rounded-xl drop-shadow-md hover:scale-105 hover:drop-shadow-2xl hover:transform-gpu hover:bg-white bgease-out duration-200 m-1 h-24 lg:h-16 mx-10 items-center">
+                    <div class=" basis-1/3 font-bold grow my-auto text-4xl lg:text-2xl">{{ info.titre }}</div>
+                    <div class="hidden lg:block basis-1/3 grow my-auto text-xl ">{{ info.contenu|u.truncate(25, '...') }}</div>
+                    <div class="basis-1/2 lg:basis-1/3 pr-2 text-2xl lg:text-xl">
+                        <div class=" ">Affichage : {{ info.dateShow ? info.dateShow|date('d-m-Y') : '' }}</div>
+                        <div class=" ">Retrait : {{ info.dateHide ? info.dateHide|date('d-m-Y') : 'non prévu' }}</div>
+                    </div>
+                </div>
+            </a>
+        {% else %}
+            <span class="">Pas d'informations personnel en cours</span>   
+        {% endfor %}      
+    </div>
+
+    <p class="pl-16 font-bold text-3xl">Informations futures</p>
+    <div class="overflow-x-hidden max-h-[20%] ml-[20px]">
+        {% for info in infoUsersToShow %}
+            <a href='{{ path('admin_info_user_show', {'id': info.id}) }}'>
+                <div class=" bg-zinc-50 flex flex-row justify-between text-center rounded-xl drop-shadow-md hover:scale-105 hover:drop-shadow-2xl hover:transform-gpu hover:bg-white bgease-out duration-200 m-1 h-24 lg:h-16 mx-10 items-center">
+                    <div class="basis-1/3 font-bold grow my-auto text-4xl lg:text-2xl">{{ info.titre }}</div>
+                    <div class="hidden lg:block basis-1/3 grow my-auto text-xl ">{{ info.contenu|u.truncate(25, '...') }}</div>
+                    <div class="basis-1/2 lg:basis-1/3 pr-2 text-2xl lg:text-xl">
+                        <div class=" ">Affichage : {{ info.dateShow ? info.dateShow|date('d-m-Y') : '' }}</div>
+                        <div class=" ">Retrait : {{ info.dateHide ? info.dateHide|date('d-m-Y') : 'non prévu' }}</div>
+                    </div>
+                </div>
+            </a>
+        {% else %}
+            <span class="">Pas de futures informations personnel</span>   
+        {% endfor %}    
+    </div>
+
+    <p class="pl-16 font-bold text-3xl"> Informations passées</p>
+    <div class="overflow-x-hidden max-h-[20%] ml-[20px]">
+        {% for info in infoUsersToHide %}
+            <a href='{{ path('admin_info_user_show', {'id': info.id}) }}'>
+                <div class=" bg-zinc-50 flex flex-row justify-between text-center rounded-xl drop-shadow-md hover:scale-105 hover:drop-shadow-2xl hover:transform-gpu hover:bg-white bgease-out duration-200 m-1 h-24 lg:h-16 mx-10 items-center">
+                    <div class="basis-1/3 font-bold grow my-auto text-4xl lg:text-2xl">{{ info.titre|u.truncate(15, '...') }}</div>
+                    <div class="hidden lg:block basis-1/3 grow my-auto text-xl ">{{ info.contenu|u.truncate(25, '...') }}</div>
+                    <div class="basis-1/2 lg:basis-1/3 pr-2 text-2xl lg:text-xl">
+                        <div class=" ">Affichage : {{ info.dateShow ? info.dateShow|date('d-m-Y') : '' }}</div>
+                        <div class=" ">Retrait : {{ info.dateHide ? info.dateHide|date('d-m-Y') : '' }}</div>
+                    </div>
+                </div>
+            </a>
+        {% else %}
+            <span class="">Pas d'anciennes informations personnel</span>   
+        {% endfor %}     
+    </div>
+
+</div>
+
+{% endblock %}

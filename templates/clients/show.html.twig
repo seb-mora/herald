@@ -1,0 +1,54 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+
+{% block title %}Herald-Administration{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex flex-column justify-center bg-white/[.75] min-h-[82%] ">
+    <div class=" mt-12 pb-12 overflow-x-hidden h-[670px] lg:h-[650px] w-[100%] lg:w-[900px] justify-center text-center bg-white rounded-2xl shadow-2xl mx-auto">
+        <div class="text-center text-2xl">
+            <h1 class="text-4xl min-[950px]:text-5xl font-bold pt-12 pb-14">{{client.nom}}</h1>
+            <div class="flex flex-col pb-8">
+                <p> <span class="font-bold">Adresse :<br></span> {{ client.adresse }}</p>
+                <br>
+                <p> <span class="font-bold">Telephone :<br></span> {{ client.telephone }}</p>
+            </div>
+
+            {% for chantier in chantiers %}
+                <a href='{{ path('admin_chantiers_show', {'id': chantier.id}) }}'>
+                    <div class=" bg-zinc-50 flex flex-row justify-between text-center rounded-xl drop-shadow-md hover:scale-105 hover:drop-shadow-2xl hover:transform-gpu hover:bg-white bgease-out duration-200 m-1 h-24  mx-10 ">
+                        <div class=" md:basis-1/5 grow my-auto hidden md:block md:text-xl lg:text-base">{{ chantier.nom }}</div>
+                        <div class="basis-1/5 md:basis-1/5 grow my-auto text-2xl md:text-xl lg:text-base">{{ chantier.localisation }}</div>
+                        <div class="basis-1/5 md:basis-1/5 grow my-auto text-2xl md:text-xl lg:text-base">{{ chantier.dateDebut|date('d-m-Y')}}</div>
+                        <div class="basis-1/5 md:basis-1/5 grow my-auto text-base">
+
+                            {% if chantier.factureEmise == 1 and chantier.paiementRecu == 1 %}
+                                <div class="text-emerald-600">Facturé</div>
+                                <div class="text-emerald-600">Payé</div>
+                            {% elseif chantier.factureEmise == 1 and chantier.paiementRecu == 0 %}
+                                <div class="text-emerald-600">Facturé</div>
+                                <div class="text-red-600">En attente de paiement</div>
+                            {% elseif chantier.factureEmise == 0 %}
+                                <div class="text-red-600">A facturer</div>
+                            {% endif %}
+
+                            {% if chantier.clos == 1 %}
+                                <div class="text-emerald-600">Affaire close</div>
+                            {% else %}
+                                <div class="text-red-600">Affaire en cours</div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </a>
+            {% else %} 
+                <p>Aucune entrée trouvée</p>
+            {% endfor %}
+            <a class="nav-link" href="{{ path('admin_clients_edit', {'id': client.id}) }}">
+                <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">Modifier cient</button>
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

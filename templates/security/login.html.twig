@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Herald - Se connecter{% endblock %}
+
+{% block body %}
+
+    <div class="max-w-5xl mx-auto items-stretch flex-column h-[90%] justify-center grid content-between">
+        <div class="bg-white/70 h-[90%] h-96 w-96 rounded-3xl shadow-2xl  grid content-center mt-56">
+            <form method="post">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+
+                {% if app.user %}
+                    <div class="mb-3 text-center">
+                         Vous êtes connecté en tant que {{ app.user.userIdentifier }}. <a href="{{ path('app_logout') }}">Déconnexion</a>
+                    </div>
+                {% endif %}
+
+                <div class="text-center mx-auto grid justify-items-center">
+                    <label for="inputLogin" class="text-xl">Login</label>
+                    <input type="text" value="{{ last_username }}" name="login" id="inputLogin" class="form-control input-accent" autocomplete="username" required autofocus>
+                    <label for="inputPassword" class="text-xl">Mot de passe</label>
+                    <input type="password" name="password" id="inputPassword" class="form-control input-accent" autocomplete="current-password" required>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+                    <button class="btn btn-lg text-white bg-emerald-600 border-white hover:text-emerald-600 hover:border-emerald-600 hover:bg-white w-40 mt-8" type="submit">Connexion</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+{% endblock %}

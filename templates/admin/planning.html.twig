@@ -1,0 +1,172 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+
+{% block title %}Herald - Administration{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex flex-column justify-center bg-white/[.75] min-h-[82%] ">
+    <div class=" mt-12 pb-12 overflow-x-hidden h-[670px] lg:h-[600px] w-[100%] lg:w-[900px] justify-center text-center bg-white rounded-2xl shadow-2xl mx-auto">
+        <div class="text-center text-2xl">
+            <h1 class="text-5xl font-bold pt-2 min-[950px]:pt-12 pb-2 min-[950px]:pb-14">Planning</h1>
+            {% set nowDate = "now" %}
+            <p class="text-xl sm:text-2xl"> Nous sommes le {{nowDate|date("d-m-Y")}}, semaine {{nowDate|date("W")}}.</p>
+       
+            <p> Rechercher une date : <p>
+            <form action="{{ path('index_planning', {'id': app.user.id}) }}" method="get">
+                <input name="selected_date" class=" input input-bordered" type="date" value="{{ laDate ? laDate|date("d-m-Y") : '' }}" />
+                <button type="submit" class="hover:font-bold duration-200 pl-4 w-32 text-center">Afficher</button>
+                <p class="text-xl"><span class="text-emerald-700">Semaine actuelle</span> / <span class="text-blue-600">Semaine recherchée</span></p>
+            </form>
+        </div>
+    <div class="text-center pt-2 min-[950px]:pt-10 pb-4">
+        <a class="nav-link font-bold text-xl text-emerald-600  hover:underline duration-200" href="{{ path('index_planning', {'id': app.user.id}) }} ">Rétablir l'affichage contemporain</a>
+    </div>
+
+    <div class="flex-container">
+        <div class="flex-item min-[950px]:block hidden mx-auto border-black border-2   w-fit text-xl rounded-lg">
+            <div class="flex flex-row">
+                <div class="w-36 font-bold border border-black">
+                    <span class="pl-12">semaines </span>
+                    <br>
+                    <span class="pl-1">equipes </span>
+                </div>
+           
+                {% for i in -5..10 %}
+                    {% if laDate|date_modify(i ~ " week")|date("W") == nowDate|date("W") %}
+                        <div  class=" text-center pt-3 font-bold bg-emerald-600 border border-black text-white w-10 ">
+                    {% elseif  i == 0 %}
+                        <div  class=" text-center pt-3 font-bold bg-blue-600 border border-black text-white w-10">
+                    {% else %}
+                        <div class=" text-center pt-3 font-bold border border-black w-10"> 
+                    {% endif %}
+                        {{ laDate|date_modify(i ~ " week")|date("W") }}</th>
+                        </div>  
+                {% endfor %}   
+                        </div> 
+
+                {% for equipe in equipes %}
+                    <div class="flex flex-row">
+                        <div class="border border-black font-bold w-36 text-center">
+                            <a title="{{equipe.nom }}" href='{{ path('admin_equipes_show', {'id': equipe.id}) }}'>{{equipe.nom|u.truncate(10, '...')}}</a>
+                        </div>
+                        
+                        {% for i in -5..10 %}
+                            <div class="border border-black  w-10">
+                                {% for equipChantier in equipChantiers %}
+                                    {% if equipChantier.fkEquipe.getId == equipe.id and
+                                        equipChantier.dateIn|date("W") <= laDate|date_modify(i ~" weeks")|date("W") and equipChantier.dateOut|date("W") >= laDate|date_modify(i ~" weeks")|date("W") %}
+                                        <a href='{{ path('admin_chantiers_show', {'id': equipChantier.fkChantier.id}) }}'>
+                                            <div class=" h-full w-10 bg-emerald-600" title="{{equipChantier.fkChantier.nom }}"></div>
+                                        </a>
+                                    {% endif %}
+                                {% endfor %}
+                             </div> 
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+
+                <div>Chantiers non attribués</div>
+                    {% for chantier in chantiersNonOrga %}
+                        <div class="flex flex-row">
+                            <div class="border border-black font-bold w-36 text-center">
+                                <a href='{{ path('admin_chantiers_show', {'id': chantier.id}) }}'>{{chantier.nom}}</a>
+                            </div>
+                            {% for i in -5..10 %}
+                                <div class="border border-black  w-10">
+                                    {% if 
+                                        chantier.dateDebut|date("W") <= laDate|date_modify(i ~" weeks")|date("W") and chantier.dateFin|date("W") >= laDate|date_modify(i ~" weeks")|date("W") %}
+                                        <div class=" h-full w-10 bg-emerald-600" title="{{chantier.nom }}"></div>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>              
+                        <form class="w-64 mx-auto" method="post" action="{{ path('admin_attrib', {'id': chantier.id}) }}">
+                            <select name="equipe_assignment" class="select h-8 select-bordered">
+                                <option value="" disabled selected></option>
+                                {% for equipe in equipes %}
+                                    <option value="{{ equipe.id }}">{{ equipe.nom }}</option>
+                                {% endfor %}
+                            </select>
+                            <button type="submit">Attribuer</button>
+                        </form>   
+                    {% endfor %}
+                </div>
+            </div>
+
+        
+            <div class="flex-item block min-[950px]:hidden mx-auto border-black border-2 w-fit text-xl rounded-lg flex flex-row mb-12">
+                <div class="flex flex-col">
+                    <div class="w-10 h-28 font-bold border border-black">      
+                </div>
+
+                {% for i in -5..10 %}
+                    {% if laDate|date_modify(i ~ " week")|date("W") == nowDate|date("W") %}
+                        <div  class=" text-center font-bold bg-emerald-600 border border-black text-white w-10 h-10">
+                    {% elseif  i == 0 %}
+                        <div  class=" text-center font-bold bg-blue-600 border border-black text-white w-10 h-10">
+                    {% else %}
+                        <div class=" text-center font-bold border border-black h-10 w-10"> 
+                    {% endif %}
+                        {{ laDate|date_modify(i ~ " week")|date("W") }}</th>
+                        </div>  
+                {% endfor %}   
+                        </div> 
+
+                {% for equipe in equipes %}
+                    <div class="flex flex-col">
+                        <div class="border border-black font-bold w-[82px] h-28">
+                            <a href='{{ path('admin_equipes_show', {'id': equipe.id}) }}' >
+                                <div class="pt-10 " title="{{equipe.nom }}">{{equipe.nom|u.truncate(7, '...') }}
+                            </a>
+                        </div>
+                    </div>
+
+                    {% for i in -5..10 %}
+                        <div class="border border-black  h-10">
+                            {% for equipChantier in equipChantiers %}
+                                {% if equipChantier.fkEquipe.getId == equipe.id and
+                                    equipChantier.dateIn|date("W") <= laDate|date_modify(i ~" weeks")|date("W") and equipChantier.dateOut|date("W") >= laDate|date_modify(i ~" weeks")|date("W") %}
+                                    <div class=" h-10 w-20 bg-emerald-600" title="{{equipChantier.fkChantier.nom }}"></div>
+                                {% endif %}
+                            {% endfor %}
+                        </div> 
+                    {% endfor %}
+                     </div>
+                {% endfor %}
+
+                <div class="flex flex-col">    
+                    <div class="flex">
+                        {% for chantier in chantiersNonOrga %}
+                            <div class="flex flex-col">
+                                <form class="w-40 h-20 mx-auto border border-black" method="post" action="{{ path('admin_attrib', {'id': chantier.id}) }}">
+                                    <select name="equipe_assignment" class="select h-8 w-36 select-bordered">
+                                        <option value="" disabled selected></option>
+                                        {% for equipe in equipes %}
+                                            <option value="{{ equipe.id }}">{{ equipe.nom }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <br>
+                                    <button type="submit">Assigner</button>
+                                </form>
+
+                                <div class="border border-black font-bold w-40 h-8 text-center">
+                                    <a href='{{ path('show_chantier', {'id': chantier.id}) }}'>{{chantier.nom}} </a>
+                                </div>
+                                {% for i in -5..10 %}
+                                    {% if 
+                                        chantier.dateDebut|date("W") <= laDate|date_modify(i ~" weeks")|date("W") and chantier.dateFin|date("W") >= laDate|date_modify(i ~" weeks")|date("W") %}
+                                        <div class="border border-black h-10 bg-emerald-600"></div>
+                                    {% else %}
+                                        <div class="border border-black h-10"> </div>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

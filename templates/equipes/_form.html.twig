@@ -1,0 +1,11 @@
+{{form_errors(form)}}
+
+{{ form_start(form) }}
+
+    <div class="pt-10 pb-10">
+        {{ form_widget(form) }}
+    </div>
+   
+    <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">{{ button_label|default('Enregistrer') }}</button>
+    
+{{ form_end(form) }}

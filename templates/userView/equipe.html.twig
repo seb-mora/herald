@@ -1,0 +1,56 @@
+{% extends 'users/baseUsers.html.twig' %}
+
+{% block title %}Mon équipe{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex flex-column justify-center bg-white/[.75] min-h-[82%] grid content-evenly">
+    <div class=" mt-4 overflow-x-hidden h-[670px] lg:h-[700px] w-[90%] lg:w-[900px] justify-center text-center bg-white/80 rounded-2xl shadow-2xl">
+        <h1 class="text-4xl font-bold pt-12  ">{{nom}}</h1>
+            <div class="  h-[400px] mt-[50px]">
+                {% if equipe == null %}
+                    no records found 
+                {% endif %}
+
+                <p class="text-2xl pb-2"> Responsable</p>
+                <div class="  w-[90%] mx-auto flex flex-row justify-evenly">
+                    {% for membre in equipe %}
+                        {% if membre.getFkStatus.getNom == 'Responsable' %}
+                            <div class=" bg-white border border-2 border-emerald-600 h-[90px] w-[150px] rounded-xl shadow-xl grid content-center">
+                                <p>{{ membre.nom }}</p>
+                                <p>{{ membre.prenom }}</p>
+                                <p>{{ membre.telephone }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %} 
+                </div>
+                <p class="text-2xl pt-8 pb-2"> Techniciens</p>
+                <div class=" w-[90%] mx-auto flex flex-row justify-evenly">
+                    {% for membre in equipe %}
+                        {% if membre.getFkStatus.getNom == 'Technicien' %}
+                            <div class="bg-white border border-2 border-teal-500 h-[90px] w-[150px] rounded-xl shadow-xl grid content-center">
+                                <p>{{ membre.nom }}</p>
+                                <p>{{ membre.prenom }}</p>
+                                <p>{{ membre.telephone }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %} 
+                </div>
+                <p class="text-2xl pt-8 pb-2"> Manoeuvres</p>
+                <div class=" w-[90%] mx-auto flex flex-row justify-evenly">
+                    {% for membre in equipe %}
+                        {% if membre.getFkStatus.getNom == 'Ouvrier' %}
+                            <div class="bg-white border border-2 border-cyan-400 h-[90px] w-[150px] rounded-xl shadow-xl grid content-center">
+                                <p>{{ membre.nom }}</p>
+                                <p>{{ membre.prenom }}</p>
+                                <p>{{ membre.telephone }}</p>
+                            </div>
+                        {% endif %}
+                    {% endfor %}  
+                </div> 
+            </div>
+        </div >
+    </div>
+</div>
+
+{% endblock %}

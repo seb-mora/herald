@@ -1,0 +1,32 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+
+{% block title %}InfoVisit{% endblock %}
+
+{% block body %}
+  
+<div class="max-w-5xl mx-auto items-stretch flex-col justify-center bg-white/70 h-[82%] text-center grid content-evenly">
+
+    <div class="justify-center w-screen lg:w-[900px] mx-auto bg-white pt-4 text-center rounded-2xl shadow-2xl">
+        <div class="justify-center pb-2 text-center">   
+            <p class="text-2xl"> Information visiteur</p>      
+        </div>
+        <p class="text-xl " > Affichée à partir du {{  info_visit.dateShow ?  info_visit.dateShow|date('d-m-Y H:i:s') : '' }}</p>
+        {% if info_visit.dateHide %}
+            <p class="text-xl pb-4" >Jusqu'au {{  info_visit.dateHide ?  info_visit.dateHide|date('d-m-Y H:i:s') : '' }}</p>
+        {% endif %}
+        <p class="text-4xl lg:text-5xl font-bold pt-4" >{{ info_visit.titre}} </p>
+        <p class="text-xl pt-4 pb-10 px-8">{{  info_visit.contenu }}</p>
+        <div class=" pb-4">
+            <a class="nav-link" href="{{ path('admin_info_visit_edit', {'id':  info_visit.id}) }}">
+                <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200 ">Modifier les dates</button>
+            </a> 
+        </div>
+    </div>
+
+    <a class="nav-link" href="{{ path('admin_info_visit_index') }}">
+        <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">Retour aux informations visiteurs</button>
+    </a> 
+
+</div>
+
+{% endblock %}

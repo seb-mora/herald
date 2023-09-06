@@ -1,0 +1,143 @@
+<div class="navbar bg-base-100">
+    <div class="navbar-start">
+        <div class="dropdown">
+            <label tabindex="0" class="btn btn-ghost lg:hidden border-4">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 6h16M4 12h8m-8 6h16" /></svg>
+            </label>
+            <ul tabindex="0" class=" menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-64 ">
+                <li>
+                    <a class="nav-link text-2xl" href="{{ path('user_planning', {'id': app.user.id}) }}"><span>Mon planning</span></a>
+                </li>
+                <li>
+                    <a class="nav-link text-2xl" href="{{ path('show_messages', {'id': app.user.id}) }}"><span>Ma messagerie</span>
+                        {% if nbrNonLus and nbrNonLus > 0 %}
+                            <span style ="color:#ff5757"> {{nbrNonLus}}</span> 
+                        {% endif %}
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link text-2xl" href="{{ path('list_chantiers', {'id': app.user.id}) }}"><span>Mes chantiers</span></a>
+                </li>
+                <li>
+                    <a class="nav-link text-2xl" href="{{ path('show_equipe', {'id': app.user.id}) }}"><span>Mon equipe</span></a>
+                </li>
+                <li>
+                    <a class="nav-link text-2xl" href="{{path('autres_equipes', {'id': app.user.id})  }}"><span>Autres équipes</span></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+     {% if 'ROLE_ADMIN' in app.user.getRoles() %}
+        <a class=" font-bold bg-red-500 text-white text-xl px-5 rounded-full hover:border-2 hover:border-red-500 hover:bg-white hover:text-red-500 duration-150 text-center pb-2" href="{{ path('admin_index') }}"><span>vers administration</span></a>
+    {% endif %}
+
+    <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1 max-w-5xl">
+            <li>
+                <a class="nav-link text-xl" href="{{ path('user_planning', {'id': app.user.id}) }}"><span>Mon planning</span></a>
+            </li>
+            <li>
+                <a class="nav-link text-xl" href="{{ path('show_messages', {'id': app.user.id}) }}"><span>Ma messagerie</span>
+                    {% if nbrNonLus and nbrNonLus > 0 %}
+                        <span style ="color:#ff5757"> {{nbrNonLus}}</span>
+                    {% endif %}
+                </a>
+            </li>
+            <li>
+                <a class="nav-link text-xl" href="{{ path('list_chantiers', {'id': app.user.id}) }}"><span>Mes chantiers</span></a>
+            </li>
+            <li>
+                <a class="nav-link text-xl" href="{{ path('show_equipe', {'id': app.user.id}) }}"><span>Mon equipe</span></a>
+            </li>
+            <li>
+                <a class="nav-link text-xl" href="{{path('autres_equipes', {'id': app.user.id})  }} "><span>Autres équipes</span></a>
+            </li>
+        </ul>
+    </div>
+    <div class="navbar-end">
+    </div>
+</div>
+
+
+
+
+
+
+
+
+        {# <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="/admin">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fa-solid fa-laugh-wink"></i>
+                </div> #}
+                {# <div class="sidebar-brand-text mx-3">Bonjour {{ app.user.prenom }}!</div>
+            </a>
+
+            <hr class="sidebar-divider my-0"> #}
+
+                {# <a class="nav-link" href="{{ path('app_users_index') }}">
+                    <span>Accueil</span> </a> #}
+{# <br>
+                    <a href="{{ path('app_logout') }}">Se deconnecter</a>
+                    
+
+
+            <hr class="sidebar-divider"> #}
+
+          
+{# 
+ <li class="nav-item">
+<a class="nav-link" href="{{ path('user_planning', {'id': app.user.id}) }}"><span>Mon planning</span></a>
+
+            </li>
+
+  <li class="nav-item"> #}
+{# <form method="POST" action="{{ path('show_equipe', {'id': app.user.id}) }}" >
+                       <button class="btn" style="color:blue">Mon équipe</button>
+                    </form> #}
+                    {# <a class="nav-link" href="{{ path('show_equipe', {'id': app.user.id}) }}"><span>Mon equipe</span></a>
+
+            </li> #}
+
+
+
+            {# <li class="nav-item"> #}
+                {# <form method="POST" action="{{ path('list_chantiers', {'id': app.user.id}) }}"><button class="btn" style="color:blue">Mes chantiers</button>
+                  </form> #}
+                          {# <a class="nav-link" href="{{ path('list_chantiers', {'id': app.user.id}) }}"><span>Mes chantiers</span></a>
+             <li class="nav-item">
+                <a class="nav-link" href="{{ path('show_messages', {'id': app.user.id}) }}"><span>Ma messagerie</span>
+              
+                 {% if nbrNonLus and nbrNonLus > 0 %}
+                 <span style ="color:#ff5757"> {{nbrNonLus}}</span>{% endif %}
+                   </a>
+                
+            </li>
+            <li class="nav-item">
+               <a class="nav-link" href="{{path('autres_equipes', {'id': app.user.id})  }}"><span>Autres équipes</span></a> #}
+                 {# <form method="POST" action="{{ path('autres_equipes', {'id': app.user.id}) }}"><button class="btn" style="color:blue">Les autres équipes</button>
+                  </form> #}
+            {# </li> #}
+           
+         
+            {# <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_commentaires_index') }}"><span>Commentaires 
+                {% if comsToValidation and comsToValidation > 0 %}
+                &nbsp;&nbsp;&nbsp;&nbsp; <span style ="color:#ff5757">{{comsToValidation}}</span>
+                {% endif %}
+                </span>     
+                </a>
+            </li> #}
+
+            {# <li class="nav-item">
+                <a class="nav-link" href="{{ path('app_users_index') }}"><span>Déconnexion</span></a>
+            </li> #}
+
+            {# <li class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </li> #}
+
+        {# </ul> #}
+    <!-- End of Sidebar -->

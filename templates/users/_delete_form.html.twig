@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('admin_delete', {'id': employe.id}) }}" onsubmit="return confirm('Êtes-vous sûr(e) de vouloir supprimer cet(te) employé(e) des bases de données ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ employe.id) }}">
+    <button class="btn border-2 border-red-500 hover:bg-red-500 hover:font-bold hover:text-white duration-200">Supprimer</button>
+</form>

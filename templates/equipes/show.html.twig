@@ -1,0 +1,119 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+
+{% block title %}Herald - Administration{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex flex-column justify-center bg-white/[.75] min-h-[82%] grid content-evenly">
+    <div class=" mt-4 overflow-x-hidden h-[670px] mx-auto lg:h-[700px] w-[90%] lg:w-[900px] justify-center text-center bg-white/80 rounded-2xl shadow-2xl">
+        <h1 class="text-4xl font-bold pt-8  ">{{equipe.nom}}</h1>
+        <div class="h-[400px] mt-[30px]">
+
+            {% if equipe.getUsers() is empty and chantiers is empty %}
+                <div class="flex flex-row w-80 mx-auto justify-between">
+                    <a class="nav-link" href="{{ path('admin_equipes_edit', {'id': equipe.id}) }}">
+                        <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">Renommer l'équipe</button>
+                    </a>
+                    {{ include('equipes/_delete_form.html.twig') }}
+                </div>
+            {% else %}
+                <div class="flex flex-row w-80 mx-auto justify-center pt-4">
+                    <a class="nav-link" href="{{ path('admin_equipes_edit', {'id': equipe.id}) }}">
+                        <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">Renommer l'équipe</button>
+                    </a>
+                </div>
+            {% endif %}
+            <p class="text-center mx-auto w-2/3">Pour supprimer une équipe, il est nécessaire qu'elle n'ai pas de chantier à son actif et d'en retirer les membres au préalable. </p>
+               
+            {% set respActif = 0 %}   
+            {% if equipe == null %}
+                <p>Cette équipe ne compte actuellement aucun membre.</p>
+            {% endif %}
+
+            <p class="text-2xl pb-2"> Responsable</p>
+            <div class="w-[90%] mx-auto flex flex-row justify-evenly">
+                {% for membre in membres  %}
+                    {% if membre.getFkStatus.getNom == 'Responsable' %}
+                    {% set respActif = 1 %}
+                    <div>
+                        <a href='{{ path('show_employe', {'id': membre.id}) }}' class="">
+                            <div class=" bg-white border border-2 border-emerald-600 h-[90px]  w-[150px] rounded-xl shadow-xl grid content-center">
+                                <p>{{ membre.nom }}</p>
+                                <p>{{ membre.prenom }}</p>
+                                <p>{{ membre.telephone }}</p>
+                            </div>
+                        </a>
+                        <a class="nav-link text-red-500" href="{{ path('admin_equipes_unset', {'id': membre.id}) }}"><span>Retirer de l'équipe</span></a>
+                        </div>
+                    {% endif %}
+                {% endfor %} 
+            </div>
+            <p class="text-2xl pt-8 pb-2"> Techniciens</p>
+            <div class=" w-[90%] mx-auto flex flex-row justify-evenly">
+                {% for membre in membres  %}
+                    {% if membre.getFkStatus.getNom == 'Technicien' %}
+                    <div>
+                        <a href='{{ path('show_employe', {'id': membre.id}) }}' class="">
+                            <div class="bg-white border border-2 border-teal-500 h-[90px] w-[150px] rounded-xl shadow-xl grid content-center">
+                                <p>{{ membre.nom }}</p>
+                                <p>{{ membre.prenom }}</p>
+                                <p>{{ membre.telephone }}</p>
+                            </div>
+                        </a>
+                        <a class="nav-link text-red-500" href="{{ path('admin_equipes_unset', {'id': membre.id}) }}"><span>Retirer de l'équipe</span></a>
+                        </div>
+                    {% endif %}
+                {% endfor %} 
+            </div>
+            <p class="text-2xl pt-8 pb-2"> Manoeuvres</p>
+            <div class=" w-[90%] mx-auto flex flex-row justify-evenly">
+                {% for membre in membres  %}
+                    {% if membre.getFkStatus.getNom == 'Ouvrier' %}
+                    <div>
+                        <a href='{{ path('show_employe', {'id': membre.id}) }}' class="">
+                            <div class="bg-white border border-2 border-cyan-400 h-[90px] w-[150px] rounded-xl shadow-xl grid content-center">
+                                <p>{{ membre.nom }}</p>
+                                <p>{{ membre.prenom }}</p>
+                                <p>{{ membre.telephone }}</p>
+                            </div>
+                        </a>
+                        <a class="nav-link text-red-500" href="{{ path('admin_equipes_unset', {'id': membre.id}) }}"><span>Retirer de l'équipe</span></a>
+                        </div>
+                    {% endif %}
+                {% endfor %}  
+            </div> 
+
+            <div class="py-4">
+                {% if membresLibres is empty %}
+                    <p> Pas d'employés disponibles actuellement</p>
+                {% else %}
+                    <p class="text-2xl">Employés disponibles</p>
+                    {% for membreLibre in membresLibres %}
+                        <div class=" flex flex-row w-[90%] mx-auto border-2 duration-200 border-gray-300 rounded-lg">
+                      
+                            <div class="text-xl  w-4/5 mx-auto  ">
+                              <a href='{{ path('show_employe', {'id': membreLibre.id}) }}' class="flex justify-between hover:text-emerald-600">
+                                <span class=" pl-2 font-bold">{{ membreLibre.getFkStatus.getNom }}</span>
+                                <span class="">  {{ membreLibre.prenom }} {{ membreLibre.nom }}</span> 
+                                </a> 
+                            </div>
+                         
+                            <div class="text-xl  w-4/5 mx-auto  text-center">   
+                                {% if  membreLibre.getFkStatus.getNom == 'Responsable' and respActif == 1 %}
+                                    <span class="text-red-500 ">L'équipe a déjà un responsable.</span>
+                                {% else %}
+                                    <a class="nav-link hover:font-bold" href="{{ path('admin_equipes_set', {'idEquipe': equipe.id, 'idEmploye':  membreLibre.id}) }}"><span class="text-emerald-500">Ajouter à l'équipe</span></a>
+                                {% endif %}
+                            </div >
+                        </div>
+                    {% endfor %}   
+                {% endif %}
+            </div>
+
+        </div>
+    </div >
+</div>
+
+{% endblock %}
+   
+

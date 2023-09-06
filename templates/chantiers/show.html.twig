@@ -1,0 +1,85 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+
+{% block title %}Herald - Administration{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex flex-column justify-center bg-white/[.75] min-h-[82%] grid content-evenly">
+    <div class=" mt-4 overflow-x-hidden h-[670px] lg:h-[600px] w-[90%] lg:w-[900px] justify-center text-center bg-white rounded-2xl shadow-2xl">
+        <p class="text-4xl font-bold pt-5 pb-4" >{{ chantier.nom }}</p>
+        <p class="text-2xl pb-4" >Localisation : {{ chantier.localisation }}</p>
+        <div class="flex flex-row {{ photoPrinc ? 'justify-around' : 'justify-center' }} ">
+            <div class="pl-4">
+                {% if photoPrinc %}
+                    <figure>
+                        <a href={{ photoPrinc.lien }} target="_blank">
+                            <img src={{ photoPrinc.lien }} height="250" width="250" class="mx-auto h-56">
+                        </a>
+                        <figcaption class="italic px-8">{{ photoPrinc.description}} </figcaption>
+                    </figure>
+                {% endif %}
+            </div>
+            <div class=" flex flex-col grid content-around">
+                <p class="text-2xl ">Client : <span class="font-bold"><a href ="{{ path('admin_clients_show', {'id': chantier.fkClient.id}) }}">{{ chantier.fkClient.nom }}</a></span></p>
+                <p class="text-xl ">Montant : {{ chantier.montant }}€</p>
+                {% if chantier.factureEmise %}
+                    <p class="text-xl ">Facturé : <span class="text-emerald-600">Oui</span></p>
+                {% else %}
+                    <p class="text-xl ">Facturé : <span class="text-red-600">Non</span></p>
+                {% endif %}
+                {% if chantier.paiementRecu %}
+                    <p class="text-xl ">Paiement reçu : <span class="text-emerald-600">Oui</span></p>
+                {% else %}
+                    <p class="text-xl ">Paiement reçu : <span class="text-red-600">Non</span></p>
+                {% endif %}
+                {% if chantier.clos %}
+                    <p class="text-xl ">Affaire close : <span class="text-emerald-600">Oui</span></p>
+                {% else %}
+                    <p class="text-xl ">Affaire close : <span class="text-red-600">Non</span></p>
+                {% endif %}
+                <p class="text-xl ">Durée : {{ chantier.dureeSem }} semaine{{chantier.dureeSem > 1 ? "s" : "" }}</p>
+                <p class="text-xl ">Debut : {{ chantier.dateDebut|date('d-m-Y') }}</p>
+                <p class="text-xl ">Fin : {{ chantier.dateFin|date('d-m-Y') }}</p>
+            </div>
+        </div>
+        <p class="text-2xl pt-2 px-8">Description : <br>{{ chantier.description }}</p>
+        <p class="text-2xl pt-2 px-8"><span class="italic">Retour client </span>: {{ chantier.retourClient }}</p>
+        <p class="text-2xl pt-2 px-8"><span class="italic">Retour équipe </span>: {{ chantier.retourEquipe }}</p>
+
+        <div class="flex flex-row w-full justify-evenly pt-4 pb-4">
+            <div class="">
+                <p class="text-xl italic"> Equipes chargées du chantier :</p>
+                {% for equipeChan in equipesChantier %}
+                    <a href='{{ path('admin_equipes_show', {'id': equipeChan.fkEquipe.getId}) }}'>
+                        <div class="border-2 hover:border-emerald-600 duration-200 rounded-md text-lg mt-2">
+                            <p>{{ equipeChan.fkEquipe.getNom }}</p>
+                            <p>Entrée sur chantier : {{ equipeChan.dateIn|date("d-m-Y") }}</p>
+                            <p>Sortie du chantier : {{ equipeChan.dateOut|date("d-m-Y")}}</p>
+                        </div>
+                    </a>
+                {% else %}
+                    <p>Pas d'équipe trouvée.</p>
+                {% endfor %}
+            </div>
+            <div class="flex items-center">
+                <a class="nav-link" href="{{ path('app_chantiers_edit', {'id': chantier.id}) }}">
+                    <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200 ">Modifier chantier</button>
+                </a>
+            </div>     
+        </div>
+
+        <div class="grid grid-col md:grid-cols-2 mt-4 lg:grid-cols-3 justify-items-center flex items-center">
+            {% for photo in photoSec %}
+                <figure class="mb-2">
+                    <a href={{ photo.lien }} target="_blank">
+                        <img src={{ photo.lien }} height="250" width="250">
+                    </a>
+                    <figcaption>{{ photo.description}}</figcaption>
+                </figure>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

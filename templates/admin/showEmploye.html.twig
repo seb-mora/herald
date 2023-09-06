@@ -1,0 +1,46 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+
+{% block title %}Herald- Administration{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex flex-column justify-center bg-white/[.75] min-h-[82%] ">
+    <div class=" mt-12 pb-12 overflow-x-hidden h-[670px] lg:h-[650px] w-[100%] lg:w-[900px] justify-center text-center bg-white rounded-2xl shadow-2xl mx-auto">
+        <div class="text-center text-2xl">
+            <h1 class="text-4xl min-[950px]:text-5xl font-bold pt-8 pb-4">{{employe.prenom}} {{employe.nom}}</h1>
+             <a href="{{ path('admin_messages_new', {'id': employe.id}) }}"><img src="{{ asset('img/message.png') }}" class="rounded-l-xl h-24 h-16 w-24 w-16 pl-2 mx-auto hover:scale-105 hover:drop-shadow-2xl hover:transform-gpu duration-200 m-2"></a>
+            <div class="flex flex-col">
+                <p> <span class="font-bold">Nom :</span> {{ employe.nom }}</p>  
+                <p> <span class="font-bold">Prenom :</span> {{ employe.prenom}}</p>
+                <p> <span class="font-bold">Login :</span> {{ employe.login }}</p>  
+                <p> <span class="font-bold">Adresse :</span> {{ employe.adresse }}</p>
+                <p> <span class="font-bold">Telephone :</span> {{ employe.telephone }}</p>
+                <p> <span class="font-bold">Status :</span> {{ employe.fkStatus ? employe.fkStatus.nom : 'Pas de statut actuel' }}</p>
+                <p> <span class="font-bold">Equipe :</span>
+                    <span class="text-emerald-600 font-bold hover:transform-gpu hover:bg-white bgease-out duration-200">
+                    {% if employe.fkEquipe %}
+                        <a class="nav-link" href="{{ path('admin_equipes_show', {'id': employe.fkEquipe.id}) }}">
+                            <span>{{ employe.fkEquipe.nom }}</span>
+                        </a>
+                    {% else %}
+                        <p> Pas d'équipe actuellement </p>
+                    {% endif %}
+                    </span>
+                </p>
+                <p> <span class="font-bold">Date d'entrée :</span> {{ employe.dateIn|date('d-m-Y') }}</p>
+                <p> <span class="font-bold">Contrat :</span> {{ employe.present == 1 ? "En cours" : "Terminé" }}</p>
+                <p> <span class="font-bold">Date de sortie :</span> {{ employe.dateOut ? employe.dateOut|date('d-m-Y') : 'Non' }}</p>    
+            </div>
+
+            <div class="flex flex-row w-80 mx-auto justify-between pt-4">
+                <a class="nav-link" href="{{ path('admin_edit', {'id': employe.id}) }}">
+                    <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">Modifier</button>
+                </a>
+
+                {{ include('users/_delete_form.html.twig') }}
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

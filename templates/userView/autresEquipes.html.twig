@@ -1,0 +1,25 @@
+{% extends 'users/baseUsers.html.twig' %}
+
+{% block title %}Autres équipes{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex-column justify-center bg-white/70 h-[82%] ">
+    <div class="justify-center pb-4 text-center">     
+        <h1 class="text-4xl lg:text-5xl font-bold pt-10" >Autres équipes</h1>
+    </div>
+
+    <div class="overflow-x-hidden max-h-[500px] lg:max-h-[400px] ml-[20px] mb-10">
+        {% for equipe in equipes %}
+           <div class="bg-zinc-50 flex flex-row justify-between text-center rounded-xl drop-shadow-md bgease-out duration-200 m-1 h-24 lg:h-16 mx-10 ">
+                <div class="md:basis-2/5 font-bold grow my-auto text-xl">{{ equipe.nom }}</div>
+                <div class="basis-1/5 md:basis-2/5 grow my-auto hidden md:block text-2xl md:text-xl lg:text-base ">{{ equipe.responsable ? equipe.responsable : ''}}</div>
+                <div class="basis-1/5 md:basis-1/5 grow my-auto text-xl md:text-xl lg:text-base">{{ equipe.telephone }}</div>
+                <div class="basis-1/5 md:basis-1/5 grow my-auto text-xl md:text-xl lg:text-base">{{ equipe.chantier }}</div>
+                <div class="basis-1/5 md:basis-1/5 grow my-auto text-xl md:text-xl lg:text-base">{{ equipe.localisation }}</div>
+            </div>    
+        {% endfor %}     
+    </div>
+</div>
+
+{% endblock %}

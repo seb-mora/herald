@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+
+    <div class="max-w-5xl mx-auto items-stretch flex-column justify-center bg-white/70 h-[90%] grid content-between">
+        <div class="justify-center pb-4 text-center">
+            <h1 class="text-4xl lg:text-5xl font-bold pt-5 pb-4" >Bienvenue sur Herald</h1>
+            <p class="hidden md:block text-2xl px-8 lg:text-xl"> Herald, la plateforme dédiée au suivi et à la gestion de nos équipes et de vos chantiers.</p>
+        </div>
+
+
+        <div class="  overflow-x-hidden h-[500px] lg:h-[500px] ml-[20px]">
+            <table class="table table-xs">
+                {% for chantier in chantiers %}
+                <tr>
+                    <a href='{{ path('app_chantier', {'id': chantier.id}) }}'>
+                        <div class=" bg-zinc-50 flex flex-row justify-between text-center rounded-xl drop-shadow-md hover:scale-105 hover:drop-shadow-2xl hover:transform-gpu hover:bg-white bgease-out duration-200 m-1 h-24 lg:h-16 mx-10 ">
+                            {% if attribute(photos, chantier.id) is defined %}
+                                <img src={{ photos[chantier.id] }} alt="Photo chantier" class="rounded-l-xl h-24 lg:h-16 w-24 lg:w-16 ">
+                            {% else %}
+                                <img src="{{ asset('img/noImage.jpg') }}" class="rounded-l-xl h-24 lg:h-16 w-24 lg:w-16">
+                            {% endif %}
+                                <div class=" md:basis-1/5 grow my-auto hidden md:block md:text-xl lg:text-base ">{{ chantier.nom }}</div><br>
+                                <div class="basis-1/5 md:basis-1/5 grow my-auto text-2xl md:text-xl lg:text-base ">{{ chantier.localisation }}</div>
+                                <div class="basis-1/5 md:basis-2/5 grow my-auto text-2xl md:text-xl lg:text-base">{{ chantier.description ? chantier.description|u.truncate(40, '...') : "Sans description" }}</div>
+                        </div>
+                    </a>
+                </tr>
+                {% endfor %} 
+            </table> 
+        </div>
+
+
+        <div class="bg-zinc-50 rounded-xl w-5/6 flex carousel shadow-2xl mx-auto h-60 lg:h-40 text-center mb-5 ">
+            {% if infoVisit is empty %}
+
+                <p>Aucune news à afficher </p>
+
+            {% else %}
+
+                {% for i in 0..infoVisit|length - 1 %}
+                    <div id="slide{{i}}" class=" rounded-xl carousel-item relative w-full text-center">
+                        <div class="flex flex-col w-full">
+                            <p class="text-3xl lg:text-xl font-bold pt-1">{{infoVisit[i].titre}}</p>
+                            <p class="text-base lg:text-xs pb-1">{{infoVisit[i].dateShow|date('d-m-Y')}}</p>
+                            <p class="text-xl lg:text-base w-3/5 mx-auto">{{infoVisit[i].contenu}}</p>
+                        </div>    
+                        <div class="absolute flex justify-between transform-translate-y-1/2 left-5 right-5  bottom-1/3">
+                            <a href="#slide{{i - 1 < 0 ? infoVisit|length - 1 : i - 1}}" class="btn btn-circle bg-emerald-600/50 hover:bg-emerald-600/25 hover:shadow-inner active:scale-50 border-slate-300">❮</a> 
+                            <a href="#slide{{i + 1 >= infoVisit|length ? 0 : i + 1 }}" class="btn btn-circle bg-emerald-600/50 hover:bg-emerald-600/25 hover:shadow-inner active:scale-50 border-slate-300">❯</a>
+                        </div>
+                    </div> 
+                {% endfor %}
+
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+

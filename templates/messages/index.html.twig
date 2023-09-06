@@ -1,0 +1,87 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+
+{% block title %}Herald - Administration{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex-column justify-center bg-white/70 h-[82%] pb-8">
+    <div class="justify-center pb-4 text-center">     
+        <h1 class="text-4xl lg:text-5xl font-bold pt-4 pb-4" >
+           Informations personnel
+        </h1>
+
+        <a class="nav-link" href="{{ path('admin_messages_new') }}">
+            <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">Nouveau message</button>
+        </a>
+
+    </div>
+
+   
+    <div class="overflow-x-hidden max-h-[80%] ml-[20px] flex flex-col">
+        {% for message in messages %}
+        <div class="flex w-[95%] mx-auto justify-between">
+            <a href='{{ path('admin_messages_show', {'id': message.id}) }}'  class="w-2/3 lg:w-4/5">
+                <div class=" bg-zinc-50 flex flex-row justify-between text-center rounded-xl drop-shadow-md hover:scale-105 hover:drop-shadow-2xl hover:transform-gpu hover:bg-white hover:z-20 bgease-out duration-200 m-1 h-24 lg:h-16 ml-10 items-center">
+                    <div class="w-2/6 font-bold grow my-auto text-4xl lg:text-2xl">{{ message.sujet }}</div>
+                    <div class="hidden lg:block w-2/6 grow my-auto text-xl "  title="{{ message.contenu}}">{{ message.contenu|u.truncate(25, '...') }}</div>
+                    
+                    <div class="w-1/6 text-center">{{ message.date ? message.date|date('d-m-Y H:i:s') : '' }}</div>
+                  
+                    <div class="hidden w-1/6 lg:block text-center grow my-auto text-xl {{ message.lu ? 'text-emerald-600' : 'text-red-500' }}">{{ message.lu ? 'Ouvert' : 'Non ouvert' }}</div>
+                 
+                </div>
+            </a>
+            <a class="w-1/3 lg:w-1/5 pr-8 " href="{{ path('show_employe', {'id': message.fkDestinataire.id}) }}">
+                <div class="border-2 bg-zinc-50 text-center items-center rounded-xl -z-10drop-shadow-md hover:scale-105 hover:drop-shadow-2xl hover:transform-gpu hover:bg-white bgease-out duration-200 m-1 h-24 lg:h-16 text-2xl lg:text-xl grid content-center">
+                    <div class="">{{ message.fkDestinataire.prenom }}</div>
+                     <div class="">{{ message.fkDestinataire.nom }}</div>
+                    </div>
+            </a>
+            </div>
+        {% else %}
+            <span class="">Pas de messages en mémoire</span>   
+        {% endfor %} 
+             
+    </div>
+
+</div>
+{% endblock %}
+{# 
+
+    <h1>Messages index</h1>
+
+    
+    <a href="{{ path('admin_messages_new') }}">Nouveau message</a>
+<br>
+<br>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Sujet</th>
+                <th>Contenu</th>
+                <th>Date</th>
+                <th>Lu</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for message in messages %}
+            <tr>
+                <td>{{ message.id }}</td>
+                <td>{{ message.sujet }}</td>
+                <td>{{ message.contenu|u.truncate(25, '...') }}</td>
+                <td>{{ message.date ? message.date|date('d-m-Y H:i:s') : '' }}</td>
+                <td>{{ message.lu ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('admin_messages_show', {'id': message.id}) }}">Consulter</a>
+                  
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table> #}

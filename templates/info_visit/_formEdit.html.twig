@@ -1,0 +1,16 @@
+{{form_errors(form)}}
+
+{{ form_start(form) }}
+
+    <div class="p-4">
+        {{form_row(form.date_show)}}
+    </div>
+    <div class="p-4">
+        {{form_row(form.date_hide)}}
+    </div>
+
+    {{ form_row(form._token) }}
+
+    <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">{{ button_label|default('Mettre à jour') }}</button>
+
+{{ form_end(form) }}

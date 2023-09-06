@@ -1,0 +1,35 @@
+{{form_errors(form)}}
+
+{{ form_start(form) }}
+
+<div class="p-4">
+    {{ form_row(form.sujet) }}
+</div>
+<div class="p-4">
+    {{ form_row(form.contenu) }}
+</div>
+<div class="p-4">
+    {{ form_row(form.fk_destinataire, {
+        'placeholder': 'Choisissez un destinataire',
+        'attr': {
+            'class': 'select2', 
+        },
+    }) }}
+</div>
+
+    <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">{{ button_label|default('Envoyer') }}</button>
+
+{{ form_end(form) }}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var userId = {{ user ? user.id : 'null' }};
+        var selectElement = document.querySelector('.select2');
+        if (userId) {
+            var option = selectElement.querySelector('option[value="'+ userId +'"]');
+            if (option) {
+                option.selected = true;
+            }
+        }
+    });
+</script>

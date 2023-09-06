@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{chantier.nom}}{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex flex-column justify-center bg-white/[.75] min-h-[90%] grid content-evenly">
+    <div class="justify-center text-center  pt-4 bg-white rounded-2xl shadow-2xl">
+        <p class="text-4xl font-bold pt-5 pb-4" >{{ chantier.nom }}</p>
+        <p class="text-2xl pb-4" >Localisation : {{ chantier.localisation }}</p>
+        {% if photoPrinc %}
+            <img class="mx-auto h-56" src={{ photoPrinc }}>
+            <p class="italic px-8">{{ photoPrinc.description}} </p>
+        {% endif %}
+
+        <p class="text-2xl pt-8 pb-8 px-8">Description : <br>{{ chantier.description }}</p>
+        <p class="text-xl pb-4 px-8">Pour le compte de : {{ chantier.fkClient.nom }}</p>
+        <p class="text-xl px-8">Debut : {{ chantier.dateDebut|date('d-m-Y') }}</p>
+        <p class="text-xl pb-8">Fin : {{ chantier.dateFin|date('d-m-Y') }}</p>
+   
+    </div>
+         <a class="mt-8 text-emerald-600 font-bold text-center" href="{{ path('app_home') }}"> -> Retour à l'accueil <- </a>
+</div>
+
+{% endblock %}
+
+

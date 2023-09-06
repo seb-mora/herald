@@ -1,0 +1,69 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+
+{% block title %}Herald - Administration{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex-col justify-center bg-white/70 h-[82%] text-center grid content-evenly">
+
+    <div class="justify-center w-screen lg:w-[900px] mx-auto bg-white pt-4 text-center rounded-2xl shadow-2xl">
+        <div class="justify-center pb-2 text-center">   
+            <p class="text-2xl"> Information personnel</p>      
+        </div>
+        <p class="text-xl " > Affichée à partir du {{  info_user.dateShow ?  info_user.dateShow|date('d-m-Y H:i:s') : '' }}</p>
+        {% if info_user.dateHide %}
+            <p class="text-xl pb-4" >Jusqu'au {{  info_user.dateHide ?  info_user.dateHide|date('d-m-Y H:i:s') : '' }}</p>
+        {% endif %}
+        <p class="text-4xl lg:text-5xl font-bold pt-4" >{{ info_user.titre}} </p>
+        <p class="text-xl pt-4 pb-10 px-8">{{  info_user.contenu }}</p>
+        <div class=" pb-4">
+            <a class="nav-link" href="{{ path('admin_info_user_edit', {'id':  info_user.id}) }}">
+                <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200 ">Modifier les dates</button>
+            </a> 
+        </div>
+    </div>
+
+    <a class="nav-link" href="{{ path('admin_info_user_index') }}">
+        <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">Retour aux informations personnel</button>
+    </a> 
+
+</div>
+
+{% endblock %}
+
+{# 
+ <h1>InfoUser</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ info_user.id }}</td>
+            </tr>
+            <tr>
+                <th>Titre</th>
+                <td>{{ info_user.titre }}</td>
+            </tr>
+            <tr>
+                <th>Contenu</th>
+                <td>{{ info_user.contenu }}</td>
+            </tr>
+            <tr>
+                <th>Date_show</th>
+                <td>{{ info_user.dateShow ? info_user.dateShow|date('d-m-Y H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Date_hide</th>
+                <td>{{ info_user.dateHide ? info_user.dateHide|date('d-m-Y H:i:s') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+<br>
+ <a href="{{ path('admin_info_user_edit', {'id': info_user.id}) }}">Modifier les dates</a>
+ <br>
+ <br>
+    <a href="{{ path('admin_info_user_index') }}">Retour aux infos employés</a>
+<br>
+    #}
+
+    {# {{ include('info_user/_delete_form.html.twig') }} #}

@@ -1,0 +1,18 @@
+{% extends 'users/baseUsers.html.twig' %}
+
+{% block title %}Messagerie{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex-col justify-center bg-white/70 h-[82%] text-center grid content-evenly">
+    <div class="justify-center md:w-[85%] mx-auto bg-white pt-4 text-center rounded-2xl shadow-2xl ">
+        <div class="justify-center pb-2 text-center">      
+            <h1 class="text-4xl lg:text-5xl font-bold pt-10" >{{message.sujet}} </h1>
+        </div>
+        <p class="text-xl pb-4" >{{ message.date|date('d-m-Y H:i:s')}}</p>
+        <p class="text-xl pt-8 pb-10 px-8">{{ message.contenu}}</p>
+    </div>
+    <a class="mt-8 pt-8 text-emerald-600 font-bold" href="{{ path('show_messages', {'id': app.user.id}) }}"> -> Retour à la messagerie <- </a>
+</div>
+
+{% endblock %}

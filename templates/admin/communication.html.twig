@@ -1,0 +1,41 @@
+{% extends 'admin/baseAdmin.html.twig' %}
+
+{% block title %}Herald - Administration{% endblock %}
+
+{% block body %}
+
+<div class="max-w-5xl mx-auto items-stretch flex-column justify-center bg-white/70 h-[82%] ">
+    <div class="justify-center pb-4 text-center">     
+        <h1 class="text-4xl lg:text-5xl font-bold pt-10" >Communication</h1>
+    </div>
+
+    <div class="text-center flex flex-col sm:flex-row justify-evenly pt-6 sm:pt-32 mx-auto">
+        <div class="w-64 mx-auto">
+            <a href={{ path('admin_info_visit_index') }} class="text-2xl  pt-4">
+                <img src={{ asset('img/infoVisit.png') }} class="mx-auto w-32 min-[850px]:w-56">
+                <span>Informations visiteurs</span>
+            </a>
+        </div>
+
+        <div class="w-64 mx-auto">
+            <a href={{ path('admin_info_user_index') }} class="text-2xl pt-4">
+                <img src={{ asset('img/infoUser.png') }} class="mx-auto w-32 min-[850px]:w-56">
+                <span>Informations personnel</span>
+            </a>
+        </div>
+
+        <div class="w-64 mx-auto">
+            <a href={{ path('admin_messages_index') }} class="text-2xl pt-4">
+                <img src={{ asset('img/message.png') }} class="mx-auto w-32 min-[850px]:w-56">
+                <span>Messagerie</span> <br>
+            </a>
+            <span class=" mx-auto text-center font-bold text-red-600 text-xl">
+                {% if messagesNonLus %}
+                {{messagesNonLus}} messages non consultés par leurs destinataires
+                {% endif %}
+            </span>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

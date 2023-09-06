@@ -1,0 +1,56 @@
+{{form_errors(form)}}
+
+{{ form_start(form) }}
+
+<div class="p-2">
+    {{ form_row(form.nom) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.localisation) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.fk_client) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.Description) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.date_debut) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.date_fin) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.duree_sem) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.montant) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.facture_emise) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.paiement_recu) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.retour_client) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.retour_equipe) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.clos) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.photo) }}
+</div>
+<div class="p-2">
+    {{ form_row(form.descrphotos) }}
+</div>
+<div class="p-2 pb-4">
+    {{ form_row(form.principale) }}
+</div>
+
+    <button class="btn border-2 border-emerald-500 hover:bg-emerald-500 hover:font-bold hover:text-white duration-200">{{ button_label|default('Enregistrer') }}</button>
+
+{{ form_end(form) }}
