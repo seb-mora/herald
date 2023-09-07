@@ -21,11 +21,17 @@ use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\Migrations\Tools\Console\Command\UpToDateCommand;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-
-
 #[Route('/users')]
 class UsersController extends AbstractController
 {
+    /**
+     * Affiche les messages reçus pas l'user connecté et les informations personnel
+     * @param MessagesRepository $messagesRepository
+     * @param EquipesRepository $equipesRepository
+     * @param InfoUserRepository $infoUserRepository
+     * @param Sort $sort
+     * @return Response
+     */
     #[Route('/', name: 'app_users_index', methods: ['GET'])]
     public function index(
         UsersRepository $usersRepository,
@@ -53,7 +59,6 @@ class UsersController extends AbstractController
 
         $nonLus = $messagesRepository->findBy(['fk_destinataire' => $user->getId(), 'lu' => 0]);
 
-
         return $this->render('home/userIndex.html.twig', [
             // 'users' => $usersRepository->findAll(),
             'infoUser' => $InfoShowable,
@@ -62,6 +67,14 @@ class UsersController extends AbstractController
     }
 
 
+    /**
+     * Permet d'afficher l'organigramme de l'équipe de l'user connecté
+     * @param UsersRepository $usersRepository
+     * @param InfoUserRepository $infoUserRepository
+     * @param Users $user
+     * @param $id
+     * @return Response
+     */
     #[Route('/equipe/{id}', name: 'show_equipe', methods: ['GET'])]
     public function showEquipe(UsersRepository $usersRepository, InfoUserRepository $infoUserRepository, Users $user, $id): Response
     {
@@ -85,6 +98,16 @@ class UsersController extends AbstractController
     }
 
 
+    /**
+     * Permet d'afficher les chantiers réalisés, actuels et prévus par l'équipe dont l'user est membre
+     * @param UsersRepository $usersRepository
+     * @param InfoUserRepository $infoUserRepository
+     * @param PhotosRepository $photosRepository
+     * @param Users $user
+     * @param Sort $sort
+     * @param $id
+     * @return Response
+     */
     #[Route('/chantiers/{id}', name: 'list_chantiers', methods: ['GET'])]
     public function listChantiers(UsersRepository $usersRepository, InfoUserRepository $infoUserRepository, PhotosRepository $photosRepository, Users $user, Sort $sort, $id): Response
     {
@@ -119,6 +142,12 @@ class UsersController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de consulter le résumé d'un chantier
+     * @param Chantiers $chantier
+     * @param PhotosRepository $photosRepository
+     * @return Response
+     */
     #[Route('/chantier/{id}', name: 'show_chantier', methods: ['GET'])]
     public function showChantier(Chantiers $chantier,  PhotosRepository $photosRepository): Response
     {
@@ -146,6 +175,15 @@ class UsersController extends AbstractController
         }
     }
 
+    /**
+     * Permet de consulter la liste des autres équipes, voyant également leur localisation actuelle, le nom de leur responsable et son numero de téléphone.
+     * @param Users $user
+     * @param EquipesRepository $equipesRepository
+     * @param ChantiersRepository $chantiersRepository
+     * @param StatusRepository $statusRepository
+     * @param Sort $sort
+     * @return Response
+     */
     #[Route('/equipes/autres/{id}', name: 'autres_equipes', methods: ['GET'])]
     public function showAutresEquipes(Users $user, EquipesRepository $equipesRepository, ChantiersRepository $chantiersRepository, StatusRepository $statusRepository, Sort $sort): Response
     {
@@ -154,7 +192,6 @@ class UsersController extends AbstractController
         $userEquipe = $user->getFkEquipe();
         $equipes = $equipesRepository->findAll();
         $equipes = $sort->sortEmpAsc($equipes);
-
 
         foreach ($equipes as $equipeIndex => $equipe) {
             if ($userEquipe->getId() === $equipe->getId() || $equipe->getNom() == 'direction') {
@@ -197,10 +234,18 @@ class UsersController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet d'afficher le liste des messages reçus par l'user connecté'
+     * @param UsersRepository $usersRepository
+     * @param InfoUserRepository $infoUserRepository
+     * @param MessagesRepository $messagesRepository
+     * @param Sort $sort
+     * @param $id
+     * @return Response
+     */
     #[Route('/messages/{id}', name: 'show_messages', methods: ['GET'])]
     public function showMessages(UsersRepository $usersRepository, InfoUserRepository $infoUserRepository, MessagesRepository $messagesRepository, Sort $sort, $id): Response
     {
-
         $user = $this->getUser();
 
         if ($user->getId() != $id) {
@@ -228,12 +273,20 @@ class UsersController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet à l'user de lire un de ses messages
+     * @param UsersRepository $usersRepository
+     * @param InfoUserRepository $infoUserRepository
+     * @param MessagesRepository $messagesRepository
+     * @param EntityManagerInterface $entityManagerInterface
+     * @param $id
+     * @return Response
+     */
     #[Route('/messages/read/{id}', name: 'read_message', methods: ['GET'])]
     public function readMessage(UsersRepository $usersRepository, InfoUserRepository $infoUserRepository, MessagesRepository $messagesRepository, EntityManagerInterface $entityManagerInterface, $id): Response
     {
         $user = $this->getUser();
         $message = $messagesRepository->findOneBy(['id' => $id]);
-
 
         if ($user->getId() != $message->getFkDestinataire()->getId()) {
             return $this->render('home/userIndex.html.twig', [
@@ -250,6 +303,13 @@ class UsersController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet à l'user connecté de consulter le planning de l'équipe dont il est membre
+     * @param Request $request
+     * @param EquipChantierRepository $equipChantierRepository
+     * @param $id
+     * @return Response
+     */
     #[Route('/planning/{id}', name: 'user_planning', methods: ['GET'])]
     public function showPlanning(Request $request, EquipChantierRepository $equipChantierRepository, $id): Response
     {
@@ -268,10 +328,17 @@ class UsersController extends AbstractController
         ]);
     }
 
+    /**
+     * Renvoie le nombre de messages non lus par l'user connecté
+     * @param UsersRepository $usersRepository
+     * @param InfoUserRepository $infoUserRepository
+     * @param MessagesRepository $messagesRepository
+     * @param $id
+     * @return Response
+     */
     #[Route('/unread/{id}', name: 'unread', methods: ['GET'])]
     public function unread(UsersRepository $usersRepository, InfoUserRepository $infoUserRepository, MessagesRepository $messagesRepository, $id): Response
     {
-
         $user = $this->getUser();
 
         if ($user->getId() != $id) {

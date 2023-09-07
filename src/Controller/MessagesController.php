@@ -17,6 +17,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/messages')]
 class MessagesController extends AbstractController
 {
+    /**
+     * Retourne le nombre de messages non ouverts par leurs destinataires
+     * @param MessagesRepository $messagesRepository
+     * @return Response
+     */
     #[Route('/', name: 'admin_com_index', methods: ['GET'])]
     public function indexCom(MessagesRepository $messagesRepository): Response
     {
@@ -27,7 +32,12 @@ class MessagesController extends AbstractController
         ]);
     }
 
-
+    /**
+     * Affiche l'ensemble des messages envoyés
+     * @param MessagesRepository $messagesRepository
+     * @param Sort $sort
+     * @return Response
+     */
     #[Route('/index', name: 'admin_messages_index', methods: ['GET'])]
     public function indexMessages(MessagesRepository $messagesRepository, Sort $sort): Response
     {
@@ -39,6 +49,14 @@ class MessagesController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de créer et envoyer un nouveau message
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param UsersRepository $usersRepository
+     * @param $id
+     * @return Response
+     */
     #[Route('/new/{id}', name: 'admin_messages_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager, UsersRepository $usersRepository, $id = null): Response
     {
@@ -67,6 +85,11 @@ class MessagesController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de voir les détails d'un message
+     * @param Messages $message
+     * @return Response
+     */
     #[Route('/{id}', name: 'admin_messages_show', methods: ['GET'])]
     public function show(Messages $message): Response
     {
@@ -76,6 +99,13 @@ class MessagesController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet la modification d'un message (non implémenté)
+     * @param Request $request
+     * @param Messages $message
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'app_messages_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Messages $message, EntityManagerInterface $entityManager): Response
     {
@@ -94,6 +124,13 @@ class MessagesController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet la suppression d'un message (non implémenté)
+     * @param Request $request
+     * @param Messages $message
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_messages_delete', methods: ['POST'])]
     public function delete(Request $request, Messages $message, EntityManagerInterface $entityManager): Response
     {

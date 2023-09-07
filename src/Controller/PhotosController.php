@@ -14,6 +14,11 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/photos')]
 class PhotosController extends AbstractController
 {
+    /**
+     * Permet d'afficher l'ensemble des photos (non implémenté)
+     * @param PhotosRepository $photosRepository
+     * @return Response
+     */
     #[Route('/', name: 'app_photos_index', methods: ['GET'])]
     public function index(PhotosRepository $photosRepository): Response
     {
@@ -22,6 +27,12 @@ class PhotosController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet d'enregistrer une nouvelle photo (non implémenté)
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/new', name: 'app_photos_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -42,6 +53,11 @@ class PhotosController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet d'afficher une photo (non implémenté)
+     * @param Photos $photo
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_photos_show', methods: ['GET'])]
     public function show(Photos $photo): Response
     {
@@ -50,6 +66,13 @@ class PhotosController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de modifier une photo (non implémenté)
+     * @param Request $request
+     * @param Photos $photo
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'app_photos_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Photos $photo, EntityManagerInterface $entityManager): Response
     {
@@ -68,6 +91,13 @@ class PhotosController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de supprimer une photo (non implémenté)
+     * @param Request $request
+     * @param Photos $photo
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_photos_delete', methods: ['POST'])]
     public function delete(Request $request, Photos $photo, EntityManagerInterface $entityManager): Response
     {

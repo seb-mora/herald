@@ -16,6 +16,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/info/visit')]
 class InfoVisitController extends AbstractController
 {
+    /**
+     * Permet d'afficher les informations visiteurs
+     * @param InfoVisitRepository $infoVisitRepository
+     * @param Sort $sort
+     * @return Response
+     */
     #[Route('/', name: 'admin_info_visit_index', methods: ['GET'])]
     public function index(InfoVisitRepository $infoVisitRepository, Sort $sort): Response
     {
@@ -42,6 +48,12 @@ class InfoVisitController extends AbstractController
     }
 
 
+    /**
+     * Permet de créer une nouvelle information visiteurs
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/new', name: 'admin_info_visit_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -72,6 +84,11 @@ class InfoVisitController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de voir les détails d'une information visiteurs
+     * @param InfoVisit $infoVisit
+     * @return Response
+     */
     #[Route('/{id}', name: 'admin_info_visit_show', methods: ['GET'])]
     public function show(InfoVisit $infoVisit): Response
     {
@@ -80,6 +97,13 @@ class InfoVisitController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de modifier les dates d'une information visiteurs
+     * @param Request $request
+     * @param InfoVisit $infoVisit
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'admin_info_visit_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, InfoVisit $infoVisit, EntityManagerInterface $entityManager): Response
     {
@@ -109,6 +133,13 @@ class InfoVisitController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de supprimer une information visiteur (non implémenté)
+     * @param Request $request
+     * @param InfoVisit $infoVisit
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_info_visit_delete', methods: ['POST'])]
     public function delete(Request $request, InfoVisit $infoVisit, EntityManagerInterface $entityManager): Response
     {

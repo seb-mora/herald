@@ -20,30 +20,27 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/equipes')]
 class EquipesController extends AbstractController
 {
-    // #[Route('/', name: 'admin_equipes_index', methods: ['GET'])]
-    // public function index(EquipesRepository $equipesRepository): Response
-    // {
-    //     return $this->render('equipes/index.html.twig', [
-    //         'equipes' => $equipesRepository->findAll(),
-    //     ]);
-    // }
-
+    /**
+     * Permet l'affichage de toutes les équipes en présentant le nom de leur resposable, le chantier où elles sont actives actuellement et sa localisation
+     * @param EquipesRepository $equipesRepository
+     * @param ChantiersRepository $chantiersRepository
+     * @param StatusRepository $statusRepository
+     * @param Sort $sort
+     * @return Response
+     */
     #[Route('/', name: 'admin_equipes_index', methods: ['GET'])]
     public function Equipes(EquipesRepository $equipesRepository, ChantiersRepository $chantiersRepository, StatusRepository $statusRepository, Sort $sort): Response
     {
         $AutresEquipes = [];
-        // $user = $this->getUser();
-        // $userEquipe = $user->getFkEquipe();
         $equipes = $equipesRepository->findAll();
         $equipes = $sort->sortEmpAsc($equipes);
-
 
         foreach ($equipes as $equipeIndex => $equipe) {
             if ($equipe->getNom() == 'direction') {
                 unset($equipes[$equipeIndex]);
             }
         }
-        // dd($equipes);
+
         foreach ($equipes as $equipeIndex => $equipe) {
             $dt = new \DateTime();
             $tab = [];
@@ -81,7 +78,12 @@ class EquipesController extends AbstractController
         ]);
     }
 
-
+    /**
+     * Permet de créer une nouvelle équipe
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/new', name: 'admin_equipes_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -102,6 +104,14 @@ class EquipesController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de voir l'organigramme d'une équipe et d'en modifier les membres.
+     * @param EquipChantierRepository $equipChantierRepository
+     * @param UsersRepository $usersRepository
+     * @param Equipes $equipe
+     * @param $id
+     * @return Response
+     */
     #[Route('/{id}', name: 'admin_equipes_show', methods: ['GET'])]
     public function show(EquipChantierRepository $equipChantierRepository, UsersRepository $usersRepository, Equipes $equipe, $id): Response
     {
@@ -117,6 +127,13 @@ class EquipesController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de changer le nom d'une équipe
+     * @param Request $request
+     * @param Equipes $equipe
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/edit/{id}', name: 'admin_equipes_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Equipes $equipe, EntityManagerInterface $entityManager): Response
     {
@@ -135,6 +152,16 @@ class EquipesController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet d'inclure un employé dans une équipe
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param EquipesRepository $equipesRepository
+     * @param UsersRepository $usersRepository
+     * @param $idEquipe
+     * @param $idEmploye
+     * @return Response
+     */
     #[Route('/set/{idEquipe}/{idEmploye}', name: 'admin_equipes_set', methods: ['GET', 'POST'])]
     public function setEmploye(Request $request,  EntityManagerInterface $entityManager, EquipesRepository $equipesRepository, UsersRepository $usersRepository, $idEquipe, $idEmploye): Response
     {
@@ -147,6 +174,13 @@ class EquipesController extends AbstractController
         return $this->redirectToRoute('admin_equipes_show', ['id' => $equipe->getId()], Response::HTTP_SEE_OTHER);
     }
 
+    /**
+     * Permet de retirer un user d'une équipe
+     * @param Request $request
+     * @param Users $user
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/unset/{id}', name: 'admin_equipes_unset', methods: ['GET', 'POST'])]
     public function unsetEmploye(Request $request, Users $user, EntityManagerInterface $entityManager): Response
     {
@@ -158,8 +192,13 @@ class EquipesController extends AbstractController
         return $this->redirectToRoute('admin_equipes_show', ['id' => $equipe->getId()], Response::HTTP_SEE_OTHER);
     }
 
-
-
+    /**
+     * Permet de supprimer une équipe.
+     * @param Request $request
+     * @param Equipes $equipe
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'admin_equipes_delete', methods: ['POST'])]
     public function delete(Request $request, Equipes $equipe, EntityManagerInterface $entityManager): Response
     {

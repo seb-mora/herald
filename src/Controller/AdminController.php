@@ -28,14 +28,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 // préparer les "no records found" sur vues vides
 // caler heures à création infoUser et infoVisit
 
-/**
- * Affiche le formulaire de modification d'un produit existant.
- * GET /product/update/{idProduct}
- * @param array $assocParams Tableau associatif des paramètres.
- * @return void
- * @throws Exception Si le tableau associatif contient l'une des clés 'view' ou 'assocParams'.
- */
-
 //TODO PLUS TARD
 // stocker messages effacés
 // ajouter en bdd qui créé quoi
@@ -47,8 +39,10 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class AdminController extends AbstractController
 {
 
+
     /**
-     * Affiche la page Communication à l'accueil, redirige sur l'index User si l'User logué n'est pas Admin.
+     * Redirige vers la page communication si User connecté n'est pas admin
+     * @param EquipesRepository $equipesRepository
      * @return Response
      */
     #[Route('/', name: 'admin_index', methods: ['GET'])]
@@ -64,8 +58,12 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_com_index', [], Response::HTTP_SEE_OTHER);
     }
 
+
     /**
-     * Affiche le formulaire de création d'un User et le traite une fois soumis.
+     * Créé un nouvel User en base de données.
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @param UserPasswordHasherInterface $userPasswordHasherInterface
      * @return Response
      */
     #[Route('/new', name: 'user_new', methods: ['GET', 'POST'])]
@@ -95,12 +93,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    /**
-     * Affiche les détails d'un User.
-     * GET /admin/{id}
-     * @param Class Users
-     * @return Response
-     */
+
     // #[Route('/{id}', name: 'app_users_show', methods: ['GET'])]
     // public function show(Users $user): Response
     // {
@@ -109,10 +102,13 @@ class AdminController extends AbstractController
     //     ]);
     // }
 
+
     /**
-     * Affiche le formulaire d'édition d'un user et le traite une fois soumis.
-     * GET /admin/edit/{id}
-     * @param Class Users
+     * Editer un User
+     * @param Request $request
+     * @param Users $user
+     * @param EntityManagerInterface $entityManager
+     * @param UserPasswordHasherInterface $userPasswordHasherInterface
      * @return Response
      */
     #[Route('/edit/{id}', name: 'admin_edit', methods: ['GET', 'POST'])]
@@ -145,10 +141,12 @@ class AdminController extends AbstractController
         ]);
     }
 
+
     /**
-     * Permet la suppression d'un User de la base de données.
-     * POST /admin/delete/{id}
-     * @param Class Users
+     * Supprimer un User
+     * @param Request $request
+     * @param Users $user
+     * @param EntityManagerInterface $entityManager
      * @return Response
      */
     #[Route('/delete/{id}', name: 'admin_delete', methods: ['POST'])]
@@ -162,10 +160,14 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('employes', ['id' => $this->getUser()->getId()], Response::HTTP_SEE_OTHER);
     }
 
+
     /**
-     * Affiche la liste des employés
-     * GET /admin/employes/{id}
-     * @param Class Users
+     * Afficher la liste des Users par ordre alphabétique
+     * @param UsersRepository $usersRepository
+     * @param InfoUserRepository $infoUserRepository
+     * @param Users $user
+     * @param Sort $sort
+     * @param $id
      * @return Response
      */
     #[Route('/employes/{id}', name: 'employes', methods: ['GET'])]
@@ -187,10 +189,13 @@ class AdminController extends AbstractController
         ]);
     }
 
+
     /**
-     * Affiche les détails d'un employé
-     * GET /admin/employe/{id}
-     * @param Class Users
+     * Voir la fiche d'un User
+     * @param UsersRepository $usersRepository
+     * @param InfoUserRepository $infoUserRepository
+     * @param Users $user
+     * @param $id
      * @return Response
      */
     #[Route('/employe/{id}', name: 'show_employe', methods: ['GET'])]
@@ -211,10 +216,15 @@ class AdminController extends AbstractController
         ]);
     }
 
+
     /**
-     * Affiche le planning général
-     * GET /admin/planning/{id}
-     * @param Class Users
+     * Affiche le planning commun et les chantier non attribués.
+     * @param Request $request
+     * @param Users $user
+     * @param ChantiersRepository $chantiersRepository
+     * @param EquipChantierRepository $equipChantierRepository
+     * @param EquipesRepository $equipesRepository
+     * @param $id
      * @return Response
      */
     #[Route('/planning/{id}', name: 'index_planning', methods: ['GET'])]
@@ -267,11 +277,15 @@ class AdminController extends AbstractController
         ]);
     }
 
+
     /**
-     * Attribue le chantier à une équipe en créant une nouvelle entrée dans la table equip_chantier
-     * POST /admin/attribuer/{id}
-     * @param Class Chantiers
-     * @param Class Equipes
+     * Permet l'attribution d'un chantier à une équipe.
+     * @param Request $request
+     * @param Chantiers $chantier
+     * @param EntityManagerInterface $entityManager
+     * @param EquipesRepository $equipesRepository
+     * @param ChantiersRepository $chantiersRepository
+     * @param $id
      * @return Response
      */
     #[Route('/attribuer/{id}', name: 'admin_attrib', methods: ['POST'])]

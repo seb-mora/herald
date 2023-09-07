@@ -12,6 +12,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class HomeController extends AbstractController
 {
+    /**
+     * Affiche les informations visiteur et la liste des chantiers
+     * @param ChantiersRepository $chantiersRepository
+     * @param InfoVisitRepository $infoVisitRepository
+     * @param PhotosRepository $photosRepository
+     * @param Sort $sort
+     * @return Response
+     */
     #[Route('/', name: 'app_home')]
     public function index(ChantiersRepository $chantiersRepository, InfoVisitRepository $infoVisitRepository, PhotosRepository $photosRepository, Sort $sort): Response
     {
@@ -44,6 +52,13 @@ class HomeController extends AbstractController
         ]);
     }
 
+    /**
+     * Affiche les détails chantier et les photos associées
+     * @param PhotosRepository $photosRepository
+     * @param ChantiersRepository $chantiersRepository
+     * @param $id
+     * @return Response
+     */
     #[Route('/chantier/{id}', name: 'app_chantier')]
     public function visitChantier(PhotosRepository $photosRepository, ChantiersRepository $chantiersRepository, $id): Response
     {
@@ -53,8 +68,6 @@ class HomeController extends AbstractController
         }
 
         $chantier = $chantiersRepository->findOneBy(['id' => $id]);
-
-
         $allPhotos = $photosRepository->findBy(['fk_chantier' => $chantier]);
         $photoPrinc = null;
         $photoSec = [];

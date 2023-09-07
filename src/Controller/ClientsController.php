@@ -16,6 +16,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 #[Route('/clients')]
 class ClientsController extends AbstractController
 {
+    /**
+     * Affiche la liste des clients
+     * @param ClientsRepository $clientsRepository
+     * @param Sort $sort
+     * @return Response
+     */
     #[Route('/', name: 'admin_clients_index', methods: ['GET'])]
     public function index(ClientsRepository $clientsRepository, Sort $sort): Response
     {
@@ -24,6 +30,12 @@ class ClientsController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet la création d'un nouveau client
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/new', name: 'admin_clients_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -44,6 +56,13 @@ class ClientsController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de voir la fiche client
+     * @param Clients $client
+     * @param ChantiersRepository $chantiersRepository
+     * @param Sort $sort
+     * @return Response
+     */
     #[Route('/{id}', name: 'admin_clients_show', methods: ['GET'])]
     public function show(Clients $client, ChantiersRepository $chantiersRepository, Sort $sort): Response
     {
@@ -56,6 +75,13 @@ class ClientsController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet d'éditer un client
+     * @param Request $request
+     * @param Clients $client
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'admin_clients_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Clients $client, EntityManagerInterface $entityManager): Response
     {
@@ -74,6 +100,13 @@ class ClientsController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de supprimer un client (non implémenté)
+     * @param Request $request
+     * @param Clients $client
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_clients_delete', methods: ['POST'])]
     public function delete(Request $request, Clients $client, EntityManagerInterface $entityManager): Response
     {

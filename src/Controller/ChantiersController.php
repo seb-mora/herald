@@ -15,18 +15,16 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-/**
- * Affiche le formulaire de modification d'un produit existant.d
- * GET /product/update/{idProduct}
- * @param array $assocParams Tableau associatif des paramètres.
- * @return void
- * @throws Exception Si le tableau associatif contient l'une des clés 'view' ou 'assocParams'.
- */
-
-
 #[Route('/chantiers')]
 class ChantiersController extends AbstractController
 {
+    /**
+     * Affiche la liste des chantiers
+     * @param ChantiersRepository $chantiersRepository
+     * @param PhotosRepository $photosRepository
+     * @param Sort $sort
+     * @return Response
+     */
     #[Route('/', name: 'admin_chantiers_index', methods: ['GET'])]
     public function index(ChantiersRepository $chantiersRepository, PhotosRepository $photosRepository, Sort $sort): Response
     {
@@ -35,13 +33,19 @@ class ChantiersController extends AbstractController
         foreach ($photosPrinc as $photo) {
             $photos[$photo->getFkChantier()->getId()] = $photo->getLien();
         }
-        // dd($photos);
+
         return $this->render('chantiers/index.html.twig', [
             'photos' => $photos,
             'chantiers' => $sort->sortChtDesc($chantiersRepository->findAll()),
         ]);
     }
 
+    /**
+     * Permet la crétion d'un chantier
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/new', name: 'app_chantiers_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -77,6 +81,13 @@ class ChantiersController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de voir la fiche chantier
+     * @param Chantiers $chantier
+     * @param PhotosRepository $photosRepository
+     * @param EquipChantierRepository $equipChantierRepository
+     * @return Response
+     */
     #[Route('/{id}', name: 'admin_chantiers_show', methods: ['GET'])]
     public function show(Chantiers $chantier, PhotosRepository $photosRepository, EquipChantierRepository $equipChantierRepository): Response
     {
@@ -101,6 +112,13 @@ class ChantiersController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de modifier un chantier
+     * @param Request $request
+     * @param Chantiers $chantier
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}/edit', name: 'app_chantiers_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Chantiers $chantier, EntityManagerInterface $entityManager): Response
     {
@@ -132,6 +150,13 @@ class ChantiersController extends AbstractController
         ]);
     }
 
+    /**
+     * Permet de supprimer un chantier (non implémenté).
+     * @param Request $request
+     * @param Chantiers $chantier
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     */
     #[Route('/{id}', name: 'app_chantiers_delete', methods: ['POST'])]
     public function delete(Request $request, Chantiers $chantier, EntityManagerInterface $entityManager): Response
     {
